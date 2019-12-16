@@ -18,10 +18,12 @@ def onlylink(submission):
         content = content.replace("\n", "")
 
         if not content:
-            removal_message = "Dieser Post wird entfernt, da er ein räudiger selfpost mit nur einem link ist.   " \
-                              "\nSchäm dich! "
+            removal_message = "Dieser Pfosten wurde entfernt, da er ein räudiger Selbstpfosten mit nur 'nem Link ist." \
+                              "  \nSchäm dich!  \nDu kannst den Link gerne als Linkpfostierung nochmal einreichen."
             submission.mod.remove()
-            submission.mod.send_removal_message(removal_message, title='depp', type='public')
+            submission.mod.send_removal_message(removal_message, title='Pfostierungsentfernung', type='public')
+
+
 
 
 if __name__ == "__main__":
@@ -33,7 +35,7 @@ if __name__ == "__main__":
                          user_agent=user_agent,
                          username=username)
 
-    print(reddit.user.me())
+    print("Login successful with user", reddit.user.me(), "...")
 
     subreddit = reddit.subreddit('rockharz')
     for submission in subreddit.stream.submissions():
