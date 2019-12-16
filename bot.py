@@ -19,5 +19,5 @@ for submission in subreddit.stream.submissions():
                                   "\nSchaem dich! "
                 # comment = submission.reply(removal_message)
                 # comment.mod.distinguish(how='yes', sticky=True)
-                submission.mod.send_removal_message(removal_message, title="Beitrag GELOESCHT", type="private_exposed")
+                submission.mod.send_removal_message("is weg", title="depp", type="private_exposed")
                 submission.mod.remove()
