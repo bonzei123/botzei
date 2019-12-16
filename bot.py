@@ -15,6 +15,7 @@ for submission in subreddit.stream.submissions():
     if submission.is_self:
         if onlyLink(submission.selftext):
             if not submission.approved:
-                comment = submission.reply("Dieser Post wird entfernt, da er ein räudiger selfpost mit nur einem link ist.   \nSchäm dich!")
-                comment.mod.distinguish(how='yes', sticky=True)
+                # comment = submission.reply("Dieser Post wird entfernt, da er ein räudiger selfpost mit nur einem link ist.   \nSchäm dich!")
+                # comment.mod.distinguish(how='yes', sticky=True)
+                submission.mod.send_removal_message("Dieser Post wird entfernt, da er ein räudiger selfpost mit nur einem link ist.   \nSchäm dich!", title="Beitrag GELÖSCHT", type="private_exposed")
                 submission.mod.remove()
