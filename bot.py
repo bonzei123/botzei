@@ -1,6 +1,8 @@
 import praw
 import re
+from datetime import datetime
 from credentials import *
+
 
 
 def onlylink(submission):
@@ -80,15 +82,34 @@ def count(subreddit):
 
 
     # this edits the sidebar
-    sidebar_text = "__"+a+"__\n\n" \
-            + "__"+b+"%__ translated\n\n" \
-            + "__"+c+"__ open \n\n" \
-            + "__"+d+"__ undecided\n\n" \
-            + "__"+e+"__ need urgent decision\n\n" \
-            + "[Konsistenztabelle] (https://docs.google.com/spreadsheets/d/1ez07F6jysWb7pAKo5gNzCjegAclD3RCWZdNAEy_TL4U/edit?usp=sharing)"
+    sidebar_text = "#__"+a+"__\n\n" \
+            + "#__"+b+"%__ translated\n\n" \
+            + "#__"+c+"__ open \n\n" \
+            + "#__"+d+"__ undecided\n\n" \
+            + "#__"+e+"__ need urgent decision\n\n" \
+            + "#__urgent translations:__\n\n"
     
+    cnt = 1
+    for post in need_approval:
+        string = str(cnt)+". ["+post.title+"]("+post.url+")\n\n"
+        sidebar_text += string
+        cnt += 1
+
+    sidebar_text +="#__old submissions:__\n\n"
+
+    cnt = 1
+    for post in undecided:
+        time = datetime.now().timestamp() - post.created_utc
+        if  datetime.utcfromtimestamp(time).day > 4:
+            string = str(cnt)+". ["+post.title+"]("+post.url+")\n\n"
+            sidebar_text += string
+            cnt +=1
+
+    sidebar_text += "[Konsistenztabelle] (https://docs.google.com/spreadsheets/d/1ez07F6jysWb7pAKo5gNzCjegAclD3RCWZdNAEy_TL4U/edit?usp=sharing)"
+
+
     sidebar = subreddit.wiki['config/sidebar']
-    
+
     # edits sidebar only if somthings changed
     if sidebar.content_md != sidebar_text:
         sidebar.edit(sidebar_text)
