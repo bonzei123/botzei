@@ -11,7 +11,8 @@ def onlylink(submission):
         urls = re.findall(regexhttp, submission.selftext)
         urls.extend(re.findall(regexwww, content))
 
-        # remove all found urls, whitespaces and linebreaks
+        # remove all found urls, whitespaces and line
+        # breaks
         for url in urls:
             content = content.replace(url, "")
         content = content.replace(" ", "")
@@ -23,20 +24,57 @@ def onlylink(submission):
             submission.mod.remove()
             submission.mod.send_removal_message(removal_message, title='Pfostierungsentfernung', type='public')
 
+def count(subreddit):
 
+    all_strings = []
+    translated = []
+    need_approval = []
+    undecided = []
 
+    for submission in subreddit.hot(limit=1000):
+        if submission.stickied:
+            sticky = submission
+        else:
+            all_strings.append(submission)
+            if submission.link_flair_text == "Erledigt":
+                translated.append(submission)
+
+            elif submission.link_flair_text == "Entscheidung benötigt":
+                need_approval.append(submission)
+
+            else:
+                undecided.append(submission)
+
+    percentage = len(translated)/len(all_strings)
+    message = "Hey! There are "+str(len(all_strings))+" strings submitted already! \n" \
+            "We already translated "+str(len(translated))+" of them! (this is "+str((percentage*100))+"%!) \n" \
+            "There are "+ str((len(all_strings)-len(translated))) +" strings to translate, where "+ str(len(undecided)) +" of them are undecided and " \
+            + str(len(need_approval)) +" need an urgent decision!\n"
+    
+    comment_exists = False
+    for comment in sticky.comments:
+        if comment.author.name == "botzei":
+            comment.edit(message)
+            comment_exists = True
+    if not comment_exists:    
+        sticky.reply(message)
+    print(message)
 
 if __name__ == "__main__":
 
     # credentials are imported from credentials.py
-    reddit = praw.Reddit(client_id=client_id,
-                         client_secret=client_secret,
-                         password=password,
-                         user_agent=user_agent,
-                         username=username)
+    try:
+        twoFA = "788459"
+        reddit = praw.Reddit(client_id=client_id,
+                            client_secret=client_secret,
+                            password=password+":"+twoFA,
+                            user_agent=user_agent,
+                            username=username)
+    except:
+        print("error")
+    print("Login successful")
 
-    print("Login successful with user", reddit.user.me(), "...")
-
-    subreddit = reddit.subreddit('rockharz')
-    for submission in subreddit.stream.submissions():
-        onlylink(submission)
+    subreddit = reddit.subreddit('translation_german')
+    count(subreddit)
+    # for submission in subreddit.stream.submissions():
+    #     onlylink(submission)
