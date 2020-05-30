@@ -8,8 +8,8 @@ from credentials import *
 def onlylink(submission):
     if submission.is_self and not submission.approved:
         content = submission.selftext
-        regexhttp = 'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
-        regexwww = 'www.(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+        regexhttp = r'http[s]?://(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
+        regexwww = r'www.(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\),]|(?:%[0-9a-fA-F][0-9a-fA-F]))+'
         urls = re.findall(regexhttp, submission.selftext)
         urls.extend(re.findall(regexwww, content))
 
@@ -65,10 +65,10 @@ def count(subreddit):
     e = str(need_approval_count)
 
     
-    message = "Hey! There are "+str(all_string_count)+" strings submitted already! \n" \
-            "We already translated "+str(translated_count)+" of them! (this is "+b+"%!) \n" \
-            "There are "+ c+" strings to translate, where "+ d +" of them are undecided and " \
-            + e +" need an urgent decision!\n"
+    # message = "Hey! There are "+str(all_string_count)+" strings submitted already! \n" \
+    #         "We already translated "+str(translated_count)+" of them! (this is "+b+"%!) \n" \
+    #         "There are "+ c+" strings to translate, where "+ d +" of them are undecided and " \
+    #         + e +" need an urgent decision!\n"
     #print(message) # for quick info/debugging in console
 
     # For a comment in the sticky submission
@@ -113,7 +113,7 @@ def count(subreddit):
     # edits sidebar only if somthings changed
     if sidebar.content_md != sidebar_text:
         sidebar.edit(sidebar_text)
-    print("finished script "+str(datetime.now())+"\n")
+    print("finished script "+str(datetime.now()))
 
 
 if __name__ == "__main__":
@@ -125,11 +125,8 @@ if __name__ == "__main__":
                         user_agent=user_agent,
                         username=username)
 
-    print("Login successful")
-
     subreddit = reddit.subreddit('translation_german')
     count(subreddit)
-
 
     # for submission in subreddit.stream.submissions():
     #     onlylink(submission)
