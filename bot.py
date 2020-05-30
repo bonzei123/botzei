@@ -113,7 +113,7 @@ def count(subreddit):
     # edits sidebar only if somthings changed
     if sidebar.content_md != sidebar_text:
         sidebar.edit(sidebar_text)
-    print("finished script "+datetime.now())
+    print("finished script "+str(datetime.now())+"\n")
 
 
 if __name__ == "__main__":
