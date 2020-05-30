@@ -69,7 +69,7 @@ def count(subreddit):
             "We already translated "+str(translated_count)+" of them! (this is "+b+"%!) \n" \
             "There are "+ c+" strings to translate, where "+ d +" of them are undecided and " \
             + e +" need an urgent decision!\n"
-    print(message) # for quick info/debugging in console
+    #print(message) # for quick info/debugging in console
 
     # For a comment in the sticky submission
     # comment_exists = False
@@ -113,6 +113,7 @@ def count(subreddit):
     # edits sidebar only if somthings changed
     if sidebar.content_md != sidebar_text:
         sidebar.edit(sidebar_text)
+    print("finished script "+datetime.now())
 
 
 if __name__ == "__main__":
