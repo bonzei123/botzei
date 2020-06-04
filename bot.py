@@ -51,6 +51,8 @@ def count(subreddit):
     removed = 0
     for log in subreddit.mod.log(limit=10000):
         if log.action == "removelink":
+            if removed == 0:
+                print(vars(log))
             removed += 1
 
     all_string_count = len(all_strings)+removed
@@ -63,23 +65,6 @@ def count(subreddit):
     c = str(all_string_count - translated_count)
     d = str(undecided_count)
     e = str(need_approval_count)
-
-    
-    # message = "Hey! There are "+str(all_string_count)+" strings submitted already! \n" \
-    #         "We already translated "+str(translated_count)+" of them! (this is "+b+"%!) \n" \
-    #         "There are "+ c+" strings to translate, where "+ d +" of them are undecided and " \
-    #         + e +" need an urgent decision!\n"
-    #print(message) # for quick info/debugging in console
-
-    # For a comment in the sticky submission
-    # comment_exists = False
-    # for comment in sticky.comments:
-    #     if comment.author.name == "botzei":
-    #         comment.edit(message)
-    #         comment_exists = True
-    # if not comment_exists:    
-    #     sticky.reply(message)
-
 
     # this edits the sidebar
     sidebar_text = "#__"+a+"__\n\n" \
