@@ -3,7 +3,8 @@ import re
 from datetime import datetime
 from credentials import *
 
-
+SUBREDDIT_NAME = "translation_german"
+TRANSLATION_WIDGET_NAME = "Translation Status"
 
 def onlylink(submission):
     if submission.is_self and not submission.approved:
@@ -92,13 +93,39 @@ def count(subreddit):
 
     sidebar_text += "[Konsistenztabelle] (https://docs.google.com/spreadsheets/d/1ez07F6jysWb7pAKo5gNzCjegAclD3RCWZdNAEy_TL4U/edit?usp=sharing)"
 
+    return sidebar_text
 
+
+def update_r2_sidebar(subreddit, sidebar_text):
     sidebar = subreddit.wiki['config/sidebar']
 
     # edits sidebar only if somthings changed
     if sidebar.content_md != sidebar_text:
         sidebar.edit(sidebar_text)
-    print("finished script "+str(datetime.now()))
+
+
+def update_d2x_sidebar(subreddit, sidebar_text):
+    translation_widget = None
+    widgets = subreddit.widgets.sidebar
+    for widget in widgets:
+        if(widget.shortName == TRANSLATION_WIDGET_NAME):
+            translation_widget = widget
+
+    # create widget if it does not exist
+    if(translation_widget is None):
+        translation_widget = create_translation_widget(subreddit)
+
+    # edits widget only if somthings changed
+    if(translation_widget.text != sidebar_text):
+        translation_widget.mod.update(text=sidebar_text)
+
+
+def create_translation_widget(subreddit):
+    # the styles will be inherited from the global template
+    styles = {'backgroundColor': '', 'headerColor': ''}
+    translation_widget = subreddit.widgets.mod.add_text_area(
+        TRANSLATION_WIDGET_NAME, 'placeholder content', styles)
+    return translation_widget
 
 
 if __name__ == "__main__":
@@ -110,8 +137,14 @@ if __name__ == "__main__":
                         user_agent=user_agent,
                         username=username)
 
-    subreddit = reddit.subreddit('translation_german')
-    count(subreddit)
+    subreddit = reddit.subreddit(SUBREDDIT_NAME)
+    print("begin script "+str(datetime.now()))
+
+    sidebar_text = count(subreddit)
+    update_r2_sidebar(subreddit, sidebar_text)
+    update_d2x_sidebar(subreddit, sidebar_text)
+
+    print("finished script "+str(datetime.now()))
 
     # for submission in subreddit.stream.submissions():
     #     onlylink(submission)
