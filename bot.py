@@ -86,7 +86,7 @@ def count(subreddit):
     cnt = 1
     for post in undecided:
         time = datetime.now().timestamp() - post.created_utc
-        if  datetime.utcfromtimestamp(time).day > 4:
+        if  datetime.utcfromtimestamp(time).day > 10:
             string = str(cnt)+". ["+post.title+"]("+post.url+")\n\n"
             sidebar_text += string
             cnt +=1
