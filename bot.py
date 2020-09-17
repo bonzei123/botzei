@@ -137,14 +137,18 @@ if __name__ == "__main__":
                         user_agent=user_agent,
                         username=username)
 
-    subreddit = reddit.subreddit(SUBREDDIT_NAME)
-    print("begin script "+str(datetime.now()))
+    subreddit = reddit.subreddit("de")
 
-    sidebar_text = count(subreddit)
-    update_r2_sidebar(subreddit, sidebar_text)
-    update_d2x_sidebar(subreddit, sidebar_text)
-
-    print("finished script "+str(datetime.now()))
+    ###
+    # sidebar updating routine
+    ###
+    # sidebar_text = count(subreddit)
+    # update_r2_sidebar(subreddit, sidebar_text)
+    # update_d2x_sidebar(subreddit, sidebar_text)
 
     # for submission in subreddit.stream.submissions():
     #     onlylink(submission)
+
+
+    for log in subreddit.mod.stream.log:
+        print(log.mod)
